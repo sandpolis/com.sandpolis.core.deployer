@@ -1,0 +1,9 @@
+{
+	"agent_type": "kilo",
+	"install": {
+		"directory": "${HOME}/.sandpolis-agent"
+	},
+	"network": {
+		"address": "test.sandpolis.com"
+	}
+}
