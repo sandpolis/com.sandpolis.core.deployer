@@ -1,12 +1,21 @@
 package com.sandpolis.core.deployer;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sandpolis.core.deployer.DeployerConfig.InstallCfg;
+import com.sandpolis.core.deployer.DeployerConfig.KiloCfg;
+import com.sandpolis.core.deployer.DeployerConfig.KiloCfg.KiloModuleCfg;
+import com.sandpolis.core.deployer.DeployerConfig.NetworkCfg;
+import com.sandpolis.core.instance.Entrypoint;
+
 public record DeployerConfig(String agent_type, NetworkCfg network, InstallCfg install, KiloCfg kilo) {
 
 	public static final DeployerConfig EMBEDDED = load();
 
 	public static DeployerConfig load() {
 
-		try (var in = Entrypoint.data().main().getResourceAsStream("/com.sandpolis.core.deployer.json")) {
+		try (var in = DeployerConfig.class.getResourceAsStream("/com.sandpolis.core.deployer.json")) {
 			if (in != null) {
 				return new ObjectMapper().readValue(in, DeployerConfig.class);
 			}
@@ -24,8 +33,9 @@ public record DeployerConfig(String agent_type, NetworkCfg network, InstallCfg i
 
 	}
 
-	public static record KiloCfg(List<KiloModuleCfg> modules) {
-		public static record KiloModuleCfg(String group, String artifact, String version, String classifier, String hash) {
+	public static record KiloCfg(KiloModuleCfg[] modules) {
+		public static record KiloModuleCfg(String group, String artifact, String version, String classifier,
+				String hash) {
 
 		}
 	}
