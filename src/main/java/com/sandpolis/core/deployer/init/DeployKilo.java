@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.hash.Hashing;
 import com.sandpolis.core.deployer.DeployerConfig;
 import com.sandpolis.core.foundation.S7SMavenArtifact;
+import com.sandpolis.core.foundation.S7SSystem;
 import com.sandpolis.core.instance.InitTask;
 
 public class DeployKilo extends InitTask {
@@ -26,7 +27,11 @@ public class DeployKilo extends InitTask {
 
 		Path lib = Paths.get(DeployerConfig.EMBEDDED.install().directory()
 				// Substitute $HOME
-				.replaceAll(Pattern.quote("${HOME}"), System.getProperty("user.home")));
+				.replaceAll(Pattern.quote("${HOME}"), System.getProperty("user.home")))
+				// Output to lib
+				.resolve("lib");
+
+		Path bin = lib.resolveSibling("bin");
 
 		try {
 			log.debug("Creating directory: {}", lib);
@@ -59,13 +64,13 @@ public class DeployKilo extends InitTask {
 			// Next try the network
 			try (var in = artifact.download()) {
 				if (in != null) {
-					log.debug("Loading module {} from network", artifact.filename());
+					log.debug("Downloading module: {}", artifact.filename());
 					Files.copy(in, lib.resolve(artifact.filename()), StandardCopyOption.REPLACE_EXISTING);
 
 					// Verify hash
 					if (!asByteSource(lib.resolve(artifact.filename()).toFile()).hash(Hashing.sha256()).toString()
 							.equalsIgnoreCase(module.hash())) {
-						throw new RuntimeException();
+						throw new RuntimeException("Module hash verification failed");
 					}
 					continue;
 				}
@@ -73,6 +78,21 @@ public class DeployKilo extends InitTask {
 
 			// Failed to locate module
 			throw new RuntimeException();
+		}
+
+		// Configure start script
+		switch (S7SSystem.OS_TYPE) {
+		case LINUX:
+			Files.writeString(bin.resolve("sandpolis-agent"), """
+					#!/bin/sh
+					exec /usr/bin/java \
+					    -Dpath.data=/var/lib/sandpolis-agent/data \
+					    -Dpath.log=/var/log/sandpolis-agent \
+					    -Dpath.lib=/usr/share/java/sandpolis-agent/lib \
+					    --module-path /usr/share/java/sandpolis-agent/lib \
+					    -m ${_module}/${_module}.Main
+											""");
+			break;
 		}
 
 		// Configure autostart
