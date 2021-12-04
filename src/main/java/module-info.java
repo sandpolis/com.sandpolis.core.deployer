@@ -17,7 +17,6 @@ module com.sandpolis.core.deployer {
 	requires com.google.protobuf;
 	requires com.sandpolis.core.foundation;
 	requires com.sandpolis.core.instance;
-	requires com.sandpolis.core.net;
 	requires com.fasterxml.jackson.databind;
 	requires org.slf4j;
 }
