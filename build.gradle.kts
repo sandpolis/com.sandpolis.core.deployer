@@ -22,6 +22,6 @@ dependencies {
 	if (project.getParent() == null) {
 		implementation("com.sandpolis:core.instance:+")
 	} else {
-		implementation(project(":module:com.sandpolis.core.instance"))
+		implementation(project(":core:com.sandpolis.core.instance"))
 	}
 }
