@@ -6,21 +6,8 @@
 //  version 2. You may not use this file except in compliance with the MPLv2. //
 //                                                                            //
 //============================================================================//
+package org.s7s.core.deployer;
 
-plugins {
-	id("java-library")
-	id("org.s7s.build.module")
-	id("org.s7s.build.protobuf")
-	id("org.s7s.build.publish")
-}
+public class DeployerContext {
 
-dependencies {
-	testImplementation("org.junit.jupiter:junit-jupiter-api:5.+")
-	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.+")
-
-	if (project.getParent() == null) {
-		implementation("org.s7s:core.instance:+")
-	} else {
-		implementation(project(":core:org.s7s.core.instance"))
-	}
 }

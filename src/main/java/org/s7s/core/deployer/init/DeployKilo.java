@@ -1,4 +1,12 @@
-package com.sandpolis.core.deployer.init;
+//============================================================================//
+//                                                                            //
+//            Copyright © 2015 - 2022 Sandpolis Software Foundation           //
+//                                                                            //
+//  This source file is subject to the terms of the Mozilla Public License    //
+//  version 2. You may not use this file except in compliance with the MPLv2. //
+//                                                                            //
+//============================================================================//
+package org.s7s.core.deployer.init;
 
 import static com.google.common.io.Files.asByteSource;
 
@@ -13,10 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.hash.Hashing;
-import com.sandpolis.core.deployer.DeployerConfig;
-import com.sandpolis.core.foundation.S7SMavenArtifact;
-import com.sandpolis.core.foundation.S7SSystem;
-import com.sandpolis.core.instance.InitTask;
+import org.s7s.core.deployer.DeployerConfig;
+import org.s7s.core.foundation.S7SMavenArtifact;
+import org.s7s.core.foundation.S7SSystem;
+import org.s7s.core.instance.InitTask;
 
 public class DeployKilo extends InitTask {
 
@@ -42,7 +50,7 @@ public class DeployKilo extends InitTask {
 		}
 
 		// Install modules
-		for (var module : DeployerConfig.EMBEDDED.kilo().modules()) {
+		for (var module : DeployerConfig.EMBEDDED.java().modules()) {
 			var artifact = S7SMavenArtifact.of(module.group(), module.artifact(), module.version(),
 					module.classifier());
 
