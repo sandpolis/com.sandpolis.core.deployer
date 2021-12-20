@@ -12,12 +12,12 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.s7s.core.deployer.DeployerConfig.InstallCfg;
-import org.s7s.core.deployer.DeployerConfig.KiloCfg;
-import org.s7s.core.deployer.DeployerConfig.KiloCfg.KiloModuleCfg;
+import org.s7s.core.deployer.DeployerConfig.JavaCfg;
+import org.s7s.core.deployer.DeployerConfig.JavaCfg.JavaModuleCfg;
 import org.s7s.core.deployer.DeployerConfig.NetworkCfg;
 import org.s7s.core.instance.Entrypoint;
 
-public record DeployerConfig(String agent_type, NetworkCfg network, InstallCfg install, KiloCfg java) {
+public record DeployerConfig(String agent_type, NetworkCfg network, InstallCfg install, JavaCfg java) {
 
 	public static final DeployerConfig EMBEDDED = load();
 
@@ -41,8 +41,8 @@ public record DeployerConfig(String agent_type, NetworkCfg network, InstallCfg i
 
 	}
 
-	public static record KiloCfg(KiloModuleCfg[] modules) {
-		public static record KiloModuleCfg(String group, String artifact, String version, String classifier,
+	public static record JavaCfg(JavaModuleCfg[] modules) {
+		public static record JavaModuleCfg(String group, String artifact, String version, String classifier,
 				String hash) {
 
 		}

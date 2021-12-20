@@ -26,9 +26,9 @@ import org.s7s.core.foundation.S7SMavenArtifact;
 import org.s7s.core.foundation.S7SSystem;
 import org.s7s.core.instance.InitTask;
 
-public class DeployKilo extends InitTask {
+public class DeployJava extends InitTask {
 
-	private static final Logger log = LoggerFactory.getLogger(DeployKilo.class);
+	private static final Logger log = LoggerFactory.getLogger(DeployJava.class);
 
 	@Override
 	public TaskOutcome run(TaskOutcome.Factory outcome) throws Exception {
@@ -55,7 +55,7 @@ public class DeployKilo extends InitTask {
 					module.classifier());
 
 			// First try embedded resources
-			try (var in = DeployKilo.class.getResourceAsStream("/lib/" + artifact.filename())) {
+			try (var in = DeployJava.class.getResourceAsStream("/lib/" + artifact.filename())) {
 				if (in != null) {
 					log.debug("Loading module {} from embedded resource", artifact.filename());
 					Files.copy(in, lib.resolve(artifact.filename()), StandardCopyOption.REPLACE_EXISTING);
@@ -114,7 +114,7 @@ public class DeployKilo extends InitTask {
 
 	@Override
 	public String description() {
-		return "Install Kilo agent";
+		return "Install Java agent";
 	}
 
 }
